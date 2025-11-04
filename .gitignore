@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# Ignore all files in the data folder
+data/*
+
+# But don't ignore the .gitkeep file
