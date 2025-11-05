@@ -1,10 +1,12 @@
 # salmon-cu-open-data-scripts
 
-R scripts for extracting NuSEDS data for submission to the [Open Government Portal](Open Government Portal) (Open Data).
+R scripts for extracting NuSEDS data for submission to the [Open Government Portal](https://search.open.canada.ca/opendata/) (Open Data).
 
 ## Overview
 
 This repository contains R scripts used to extract and prepare data from NuSEDS exports. The scripts replicate SQL queries previously run manually and produce CSV files for upload to Open Data.
+
+Outputs are intended to be uploaded as part of the [Pacific salmon conservation units (CU) sites and status Open Data Record](https://open.canada.ca/data/en/dataset/1ac00a39-4770-443d-8a6b-9656c06df6a3).
 
 ## Scripts
 
