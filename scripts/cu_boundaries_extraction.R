@@ -119,7 +119,7 @@ for (name in names(queries)) {
 
 # Write to a CSV
 for (name in names(results)) {
-  filename = paste0(name, ".csv")
+  filename = file.path("output", paste0(name, ".csv"))
   write.csv(results[[name]], file = filename, row.names = FALSE)
 }
 

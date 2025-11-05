@@ -156,7 +156,7 @@ for (name in names(queries)) {
 
 # Write each result to a CSV file
 for (name in names(status_results)) {
-  filename = paste0(name, ".csv")
+  filename = file.path("output", paste0(name, ".csv"))
   write.csv(status_results[[name]], file = filename, row.names = FALSE)
 }
 
