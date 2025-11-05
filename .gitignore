@@ -8,3 +8,9 @@ data/*
 
 # But don't ignore the .gitkeep file
 !data/.gitkeep
+
+# Also ignore all files that get exported to the output folder
+output/*
+
+# But keep the folder itself
+!output/.gitkeep
