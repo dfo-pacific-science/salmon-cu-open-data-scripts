@@ -26,7 +26,7 @@
 # Usage:
 # 1. Ensure the Excel file 'cu_profile_vw.xlsx' is in your working directory.
 # 2. Run the script to generate and inspect data frames.
-# 3. CSVs will be written after inspection.
+# 3. CSVs will be written to the output folder
 
 ################################################################################
 

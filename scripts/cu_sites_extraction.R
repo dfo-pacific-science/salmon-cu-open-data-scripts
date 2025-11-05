@@ -33,7 +33,7 @@
 # 1. Ensure the Excel files 'conserv_unit_system_sites_mv.xlsx' and
 #    'Geo_Features.xlsx' are in your working directory.
 # 2. Run the script to generate and inspect data frames.
-# 3. CSVs will be written after inspection.
+# 3. CSVs will be written to the output folder
 ################################################################################
 
 
