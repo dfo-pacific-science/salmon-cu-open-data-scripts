@@ -7,3 +7,4 @@
 data/*
 
 # But don't ignore the .gitkeep file
+!data/.gitkeep
