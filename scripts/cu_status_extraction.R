@@ -5,27 +5,27 @@
 # Date Created: November 4, 2025
 
 # Description:
-# This script extracts Wild Salmon Policy (WSP) status information
-# for Pacific salmon Conservation Units (CUs) using SQL logic originally
-# written for a database query. The SQL code has been adapted to run in R
-# using "DuckDB".
+# This script status information for Pacific salmon Conservation Units (CUs)
+# using SQL logic originally written for a database query. The SQL code has been
+# adapted to run in R using "DuckDB". The original SQL code is saved as a text
+# file and found in the SQL folder
 
 # The source data comes from the CU_PROFILE_VW database view from NuSEDS, which
 # has been exported as an Excel file ('cu_profile_vw.xlsx')
 
 # Each SQL query targets a specific species or life history type and
-# retrieves WSP Rapid and Integrated Status assessments.
+# retrieves Wild Salmon Policy (WSP) Rapid and Integrated Status assessments.
 
-# IMPORTANT:
+# Output:
+# - Each query result is saved as a named data frame (e.g., coho_status)
+# - Each data frame is written to a separate CSV file (e.g., coho_status.csv)
+# - Files are saved in the output folder with lowercase, underscore-separated names
+
+# Important:
 # The original SQL code contains multiple SELECT statements.
 # DuckDB (i.e, the dbGetQuery function) can only execute ONE SELECT query at a time.
 # Therefore, each query is run separately and stored in its own named
 # data frame for inspection and export.
-
-# OUTPUT:
-# - Each query result is saved as a named data frame (e.g., coho_status)
-# - Each data frame is written to a separate CSV file (e.g., coho_status.csv)
-# - Files are saved in the working directory with lowercase, underscore-separated names
 
 # Usage:
 # 1. Ensure the Excel file 'cu_profile_vw.xlsx' is in your working directory.

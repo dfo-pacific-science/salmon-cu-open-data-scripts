@@ -6,7 +6,8 @@
 # Description:
 # This script extracts site-level information for Pacific salmon Conservation
 # Units (CUs) using SQL logic originally written for a database query.
-# The SQL code has been adapted to run in R using "DuckDB".
+# The SQL code has been adapted to run in R using "DuckDB". The original SQL
+# code is saved as a text file and found in the SQL folder.
 
 # The source data comes from two database views from NuSEDS:
 # - CONSERV_UNIT_SYSTEM_SITES_MV: contains CU site metadata
@@ -17,16 +18,16 @@
 # Each SQL query targets a specific species or life history type and retrieves
 # site-level details including coordinates, watershed codes, and CU identifiers.
 
-# IMPORTANT:
+# Output:
+# - Each query result is saved as a named data frame (e.g., coho_sites)
+# - Each data frame is written to a separate CSV file (e.g., coho_sites.csv)
+# - Files are saved in the output folder with lowercase, underscore-separated names
+
+# Important:
 # The original SQL code contains multiple SELECT statements.
 # DuckDB (i.e., the dbGetQuery function) can only execute ONE SELECT query at a time.
 # Therefore, each query is run separately and stored in its own named data frame
 # for inspection and export.
-
-# OUTPUT:
-# - Each query result is saved as a named data frame (e.g., coho_sites)
-# - Each data frame is written to a separate CSV file (e.g., coho_sites.csv)
-# - Files are saved in the working directory with lowercase, underscore-separated names
 
 # Usage:
 # 1. Ensure the Excel files 'conserv_unit_system_sites_mv.xlsx' and

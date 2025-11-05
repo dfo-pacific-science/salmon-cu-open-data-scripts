@@ -6,21 +6,22 @@
 # Description:
 # This script extracts Conservation Unit (CU) boundary metadata for Pacific
 # salmon species using SQL logic originally written for a database query.
-# The SQL code has been adapted to run in R using "DuckDB".
+# The SQL code has been adapted to run in R using "DuckDB". The original SQL
+# code is saved as a text file and found in the SQL folder
 
 # The source data comes from the CU_PROFILE_VW database view from NuSEDS, which
 # has been exported as an Excel file ('cu_profile_vw.xlsx').
 
-# IMPORTANT:
+# Output:
+# - Each query result is saved as a named data frame (e.g., sockeye_lake_boundary)
+# - Each data frame is written to a separate CSV file (e.g., sockeye_lake_boundary.csv)
+# - Files are saved in the output folder with lowercase, underscore-separated names
+
+# Important:
 # The original SQL code contains multiple SELECT statements.
 # DuckDB (i.e., the dbGetQuery function) can only execute ONE SELECT query at a time.
 # Therefore, each query is run separately and stored in its own named data frame
 # for inspection and export.
-
-# OUTPUT:
-# - Each query result is saved as a named data frame (e.g., sockeye_lake_boundary)
-# - Each data frame is written to a separate CSV file (e.g., sockeye_lake_boundary.csv)
-# - Files are saved in the working directory with lowercase, underscore-separated names
 
 # Usage:
 # 1. Ensure the Excel file 'cu_profile_vw.xlsx' is in your working directory.
