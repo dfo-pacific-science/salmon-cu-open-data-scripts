@@ -25,7 +25,7 @@ sql/       - Original SQL queries used to generate the data. Provided for refere
 
 ## How to Use
 
-1.  Connect RStudio to this GitHub repository. If you're unfamiliar with the process, there are many tutorials available online, such as [this guide from UC Davis](https://ucd-r-davis.github.io/R-DAVIS/setting_up_git.html)
+1.  Connect RStudio to this GitHub repository. If you're unfamiliar with the process, there are many tutorials available online, such as [this guide from UC Davis](https://ucd-r-davis.github.io/R-DAVIS/setting_up_git.html).
 
 2.  Place the required Excel files in the `data/` folder:
 
@@ -40,14 +40,6 @@ sql/       - Original SQL queries used to generate the data. Provided for refere
     -   Load the Excel files into DuckDB
     -   Run SQL queries individually
     -   Save the results as CSV files in the `output/` folder
-
-## Requirements
-
--   R (≥ 4.0)
--   Packages:
-    -   `dbi`
-    -   `duckdb`
-    -   `readxl`
 
 ## Notes
 
