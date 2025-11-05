@@ -30,9 +30,11 @@
 ################################################################################
 
 # Install and Load R packages
+install.packages("dbi")
 install.packages("duckdb")
 install.packages("readxl")
 
+library(dbi)
 library(duckdb)
 library(readxl)
 
@@ -43,7 +45,7 @@ rm(list = ls(all.names = TRUE))
 con = dbConnect(duckdb())
 
 # Read in Excel file
-CU_PROFILE_DF = read_excel("cu_profile_vw.xlsx")
+CU_PROFILE_DF = read_excel("data/cu_profile_vw.xlsx")
 
 # Register data frame as table
 duckdb_register(con, "CU_PROFILE_VW", CU_PROFILE_DF)

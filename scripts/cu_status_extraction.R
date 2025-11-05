@@ -39,7 +39,7 @@ install.packages("DBI")
 install.packages("duckdb")
 install.packages("readxl")
 
-library(DBI)
+library(dbi)
 library(duckdb)
 library(readxl)
 
@@ -50,7 +50,7 @@ rm(list = ls(all.names = TRUE))
 con = dbConnect(duckdb())
 
 # Read the required Excel file into a data frame
-cu_profile_df = read_excel("cu_profile_vw.xlsx")
+cu_profile_df = read_excel("data/cu_profile_vw.xlsx")
 
 # Register the data frame as a duckdb table
 duckdb_register(con, "CU_PROFILE_VW", cu_profile_df)
