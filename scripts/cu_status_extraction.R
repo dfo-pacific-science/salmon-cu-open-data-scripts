@@ -35,11 +35,11 @@
 
 
 # Install and load required packages
-install.packages("DBI")
-install.packages("duckdb")
-install.packages("readxl")
+#install.packages("DBI")
+#install.packages("duckdb")
+#install.packages("readxl")
 
-library(dbi)
+library(DBI)
 library(duckdb)
 library(readxl)
 

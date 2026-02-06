@@ -38,11 +38,11 @@
 
 
 # Install and load required packages
-install.packages("dbi")
-install.packages("duckdb")
-install.packages("readxl")
+#install.packages("DBI")
+#install.packages("duckdb")
+#install.packages("readxl")
 
-library(dbi)
+library(DBI)
 library(duckdb)
 library(readxl)
 
@@ -54,7 +54,7 @@ con = dbConnect(duckdb())
 
 # Read Excel files into data frames
 conserv_units_system_sites_df = read_excel("data/conserv_unit_system_sites_mv.xlsx")
-geo_features_df = read_excel("data/Geo_Features.xlsx")
+geo_features_df = read_excel("data/geo_features.xlsx")
 
 # Register data frames as DuckDB tables
 duckdb_register(con, "CONSERV_UNIT_SYSTEM_SITES_MV", conserv_units_system_sites_df)
