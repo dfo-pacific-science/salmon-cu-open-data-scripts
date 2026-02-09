@@ -31,10 +31,10 @@
 
 ################################################################################
 
-# Install and Load R packages
-install.packages("DBI")
-install.packages("duckdb")
-install.packages("readxl")
+# Install and Load R packages (only need to do first time then periodically)
+#install.packages("DBI")
+#install.packages("duckdb")
+#install.packages("readxl")
 
 library(DBI)
 library(duckdb)
@@ -107,7 +107,153 @@ queries = list(
     FROM CU_PROFILE_VW
     WHERE SPECIES='Sockeye' AND LH_TYPE='River Type'
     ORDER BY FULL_CU_IN ASC
-  "
+  ",
+  CK_CU_BOUNDARY_Fr ="
+  SELECT
+    CU_NAME_FR AS NOM_UC,
+    FULL_CU_IN AS INDICE_UC,
+    SUBSTR(FULL_CU_IN, 1, 2) AS SP_QUAL,
+    SPECIES_FR AS NOM_ESPECE,
+    CU_TYPE_FR AS TYPE_UC
+    FROM
+    CU_PROFILE_VW
+    WHERE
+    SPECIES='Chinook'
+    ORDER BY FULL_CU_IN ASC;",
+
+  CK_SBC_CU_BOUNDARY_Fr ="
+    SELECT
+      CU_NAME_FR AS NOM_UC,
+      FULL_CU_IN AS INDICE_UC,
+      SUBSTR(FULL_CU_IN, 1, 2) AS SP_QUAL,
+      SPECIES_FR AS NOM_ESPECE,
+      CU_TYPE_FR AS TYPE_UC
+      FROM
+      CU_PROFILE_VW
+      WHERE
+      SPECIES='Chinook'
+      AND
+      FULL_CU_IN IN ('CK-01',
+      'CK-02',
+      'CK-03',
+      'CK-04',
+      'CK-05',
+      'CK-06',
+      'CK-07',
+      'CK-08',
+      'CK-09',
+      'CK-10',
+      'CK-11',
+      'CK-12',
+      'CK-13',
+      'CK-14',
+      'CK-15',
+      'CK-16',
+      'CK-17',
+      'CK-18',
+      'CK-19',
+      'CK-20',
+      'CK-21',
+      'CK-22',
+      'CK-25',
+      'CK-27',
+      'CK-28',
+      'CK-29',
+      'CK-31',
+      'CK-32',
+      'CK-33',
+      'CK-34',
+      'CK-35',
+      'CK-82',
+      'CK-83',
+      'CK-9005',
+      'CK-9008')
+      ORDER BY FULL_CU_IN ASC;",
+
+  CM_CU_BOUNDARY_Fr = "
+        SELECT
+      CU_NAME_FR AS NOM_UC,
+      FULL_CU_IN AS INDICE_UC,
+      SUBSTR(FULL_CU_IN, 1, 2) AS SP_QUAL,
+      SPECIES_FR AS NOM_ESPECE,
+      CU_TYPE_FR AS TYPE_UC
+      FROM
+      CU_PROFILE_VW
+      WHERE
+      SPECIES='Chum'
+      ORDER BY FULL_CU_IN ASC;",
+
+  CO_CU_SITES_Fr = "
+  SELECT
+      CU_NAME_FR AS NOM_UC,
+      FULL_CU_IN AS INDICE_UC,
+      SUBSTR(FULL_CU_IN, 1, 2) AS SP_QUAL,
+      SPECIES_FR AS NOM_ESPECE,
+      CU_TYPE_FR AS TYPE_UC
+      FROM
+      CU_PROFILE_VW
+      WHERE
+      SPECIES='Coho'
+      ORDER BY FULL_CU_IN ASC;",
+
+  PKE_CU_BOUNDARY_Fr = "
+  SELECT
+      CU_NAME_FR AS NOM_UC,
+      FULL_CU_IN AS INDICE_UC,
+      SUBSTR(FULL_CU_IN, 1, 3) AS SP_QUAL,
+      SPECIES_FR AS NOM_ESPECE,
+      CU_TYPE_FR AS TYPE_UC
+      FROM
+      CU_PROFILE_VW
+      WHERE
+      SPECIES='Pink'
+      AND
+      LH_TYPE='Even Year'
+      ORDER BY FULL_CU_IN ASC;",
+
+  PKO_CU_BOUNDARY_Fr = "
+  SELECT
+    CU_NAME_FR AS NOM_UC,
+    FULL_CU_IN AS INDICE_UC,
+    SUBSTR(FULL_CU_IN, 1, 3) AS SP_QUAL,
+    SPECIES_FR AS NOM_ESPECE,
+    CU_TYPE_FR AS TYPE_UC
+    FROM
+    CU_PROFILE_VW
+    WHERE
+    SPECIES='Pink'
+    AND
+    LH_TYPE='Odd Year'
+    ORDER BY FULL_CU_IN ASC;",
+
+  SEL_CU_BOUNDARY_Fr = "
+  SELECT
+    CU_NAME_FR AS NOM_UC,
+    FULL_CU_IN AS INDICE_UC,
+    SUBSTR(FULL_CU_IN, 1, 3) AS SP_QUAL,
+    SPECIES_FR AS NOM_ESPECE,
+    CU_TYPE_FR AS TYPE_UC
+    FROM
+    CU_PROFILE_VW
+    WHERE
+    SPECIES='Sockeye'
+    AND
+    LH_TYPE='Lake Type'
+    ORDER BY FULL_CU_IN ASC;",
+
+  SER_CU_BOUNDARY_Fr = "SELECT
+CU_NAME_FR AS NOM_UC,
+FULL_CU_IN AS INDICE_UC,
+SUBSTR(FULL_CU_IN, 1, 3) AS SP_QUAL,
+SPECIES_FR AS NOM_ESPECE,
+CU_TYPE_FR AS TYPE_UC
+FROM
+CU_PROFILE_VW
+WHERE
+SPECIES='Sockeye'
+AND
+LH_TYPE='River Type'
+ORDER BY FULL_CU_IN ASC;"
 )
 
 # Run each query and store as a named data frame
