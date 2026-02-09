@@ -2,6 +2,7 @@
 # Title: CU Boundary Extraction Script
 # Author: Stephen Finnis
 # Date Created: November 4, 2025
+# Date Modified: Feb 2026 by Erika to add French versions & update names
 
 # Description:
 # This script extracts Conservation Unit (CU) boundary metadata for Pacific
@@ -53,13 +54,13 @@ duckdb_register(con, "CU_PROFILE_VW", CU_PROFILE_DF)
 
 # Define queries and output file names
 queries = list(
-  "Chinook Salmon CU Boundary" = "
+  CK_CU_BOUNDARY_En = "
     SELECT CU_NAME, FULL_CU_IN, SUBSTR(FULL_CU_IN, 1, 2) AS SP_QUAL, SPECIES, CU_TYPE
     FROM CU_PROFILE_VW
     WHERE SPECIES='Chinook'
     ORDER BY FULL_CU_IN ASC
   ",
-  "SBC Chinook Salmon CU Boundary" = "
+  CK_SBC_CU_BOUNDARY_En = "
     SELECT CU_NAME, FULL_CU_IN, SUBSTR(FULL_CU_IN, 1, 2) AS SP_QUAL, SPECIES, CU_TYPE
     FROM CU_PROFILE_VW
     WHERE SPECIES='Chinook'
@@ -71,37 +72,37 @@ queries = list(
     )
     ORDER BY FULL_CU_IN ASC
   ",
-  "Chum Salmon CU Boundary" = "
+  CM_CU_BOUNDARY_En = "
     SELECT CU_NAME, FULL_CU_IN, SUBSTR(FULL_CU_IN, 1, 2) AS SP_QUAL, SPECIES, CU_TYPE
     FROM CU_PROFILE_VW
     WHERE SPECIES='Chum'
     ORDER BY FULL_CU_IN ASC
   ",
-  "Coho Salmon CU Boundary" = "
+  CO_CU_BOUNDARY_En = "
     SELECT CU_NAME, FULL_CU_IN, SUBSTR(FULL_CU_IN, 1, 2) AS SP_QUAL, SPECIES, CU_TYPE
     FROM CU_PROFILE_VW
     WHERE SPECIES='Coho'
     ORDER BY FULL_CU_IN ASC
   ",
-  "Pink Salmon Even Year CU Boundary" = "
+  PKE_CU_BOUNDARY_En = "
     SELECT CU_NAME, FULL_CU_IN, SUBSTR(FULL_CU_IN, 1, 3) AS SP_QUAL, SPECIES, CU_TYPE
     FROM CU_PROFILE_VW
     WHERE SPECIES='Pink' AND LH_TYPE='Even Year'
     ORDER BY FULL_CU_IN ASC
   ",
-  "Pink Salmon Odd Year CU Boundary" = "
+  PKO_CU_BOUNDARY_En = "
     SELECT CU_NAME, FULL_CU_IN, SUBSTR(FULL_CU_IN, 1, 3) AS SP_QUAL, SPECIES, CU_TYPE
     FROM CU_PROFILE_VW
     WHERE SPECIES='Pink' AND LH_TYPE='Odd Year'
     ORDER BY FULL_CU_IN ASC
   ",
-  "Sockeye Salmon Lake Type CU Boundary" = "
+  SEL_CU_BOUNDARY_En = "
     SELECT CU_NAME, FULL_CU_IN, SUBSTR(FULL_CU_IN, 1, 3) AS SP_QUAL, SPECIES, CU_TYPE
     FROM CU_PROFILE_VW
     WHERE SPECIES='Sockeye' AND LH_TYPE='Lake Type'
     ORDER BY FULL_CU_IN ASC
   ",
-  "Sockeye Salmon River Type CU Boundary" = "
+  SER_CU_BOUNDARY_En = "
     SELECT CU_NAME, FULL_CU_IN, SUBSTR(FULL_CU_IN, 1, 3) AS SP_QUAL, SPECIES, CU_TYPE
     FROM CU_PROFILE_VW
     WHERE SPECIES='Sockeye' AND LH_TYPE='River Type'
