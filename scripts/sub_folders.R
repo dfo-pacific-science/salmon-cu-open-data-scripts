@@ -15,14 +15,14 @@
 
 # Usage:
 # 1. Ensure the csv files are present in the output folder
-# 2. Run the script to slect and move the files
-# 3. CSVs will be moved to the sub folders
+# 2. Run the script to select and move the files
+# 3. CSV files will be moved to the sub folders
 ################################################################################
 
 
 
 # ---- Settings ----
-root_dir <- "output"   # Folder containing all CSVs
+root_dir <- "output"   # Folder containing all CSV files
 dry_run  <- FALSE       # Set TRUE to preview actions without moving files
 overwrite <- TRUE        # If FALSE, skip when target file already exists
 
