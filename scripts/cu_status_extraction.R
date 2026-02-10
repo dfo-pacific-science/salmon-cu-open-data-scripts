@@ -39,10 +39,12 @@
 #install.packages("DBI")
 #install.packages("duckdb")
 #install.packages("readxl")
+#install.packages("readr")
 
 library(DBI)
 library(duckdb)
 library(readxl)
+library(readr)
 
 # Clear the environment
 rm(list = ls(all.names = TRUE))
@@ -480,11 +482,18 @@ for (name in names(queries)) {
 # Inspect results in RStudio
 # Example: View(status_results$coho_status)
 
-# Write each result to a CSV file
-for (name in names(status_results)) {
-  filename = file.path("output", paste0(name, ".csv"))
-  write.csv(status_results[[name]], file = filename, row.names = FALSE)
+dir.create("output", showWarnings = FALSE, recursive = TRUE)
+
+for (nm in names(status_results)) {
+  filename <- file.path("output", paste0(nm, ".csv"))
+  write_excel_csv(status_results[[nm]], filename)  # UTF-8 with BOM
 }
+
+# # Write each result to a CSV file
+# for (name in names(status_results)) {
+#   filename = file.path("output", paste0(name, ".csv"))
+#   write.csv(status_results[[name]], file = filename, row.names = FALSE)
+# }
 
 # Disconnect from DuckDB
 dbDisconnect(con, shutdown = TRUE)

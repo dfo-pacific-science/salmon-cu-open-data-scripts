@@ -35,10 +35,12 @@
 #install.packages("DBI")
 #install.packages("duckdb")
 #install.packages("readxl")
+#install.packages("readr")
 
 library(DBI)
 library(duckdb)
 library(readxl)
+library(readr)
 
 # Clear environment
 rm(list = ls(all.names = TRUE))
@@ -257,18 +259,25 @@ ORDER BY FULL_CU_IN ASC;"
 )
 
 # Run each query and store as a named data frame
-results = list()
+boundary_results = list()
 for (name in names(queries)) {
-  results[[name]] = dbGetQuery(con, queries[[name]])
+  boundary_results[[name]] = dbGetQuery(con, queries[[name]])
 }
 
 # Now you can inspect each result in RStudio
-# View(results$SEL_CU_BOUNDARY_Fr)
+# View(boundary_results$SEL_CU_BOUNDARY_Fr)
 
-# Write to a CSV
-for (name in names(results)) {
-  filename = file.path("output", paste0(name, ".csv"))
-  write.csv(results[[name]], file = filename, row.names = FALSE)
+# # Write to a CSV
+# for (name in names(boundary_results)) {
+#   filename = file.path("output", paste0(name, ".csv"))
+#   write.csv(boundary_results[[name]], file = filename, row.names = FALSE)
+# }
+
+dir.create("output", showWarnings = FALSE, recursive = TRUE)
+
+for (nm in names(boundary_results)) {
+  filename <- file.path("output", paste0(nm, ".csv"))
+  write_excel_csv(boundary_results[[nm]], filename)  # UTF-8 with BOM
 }
 
 # Disconnect from DuckDB

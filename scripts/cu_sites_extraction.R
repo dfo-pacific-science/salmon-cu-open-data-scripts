@@ -558,12 +558,6 @@ for (name in names(queries)) {
 # Inspect results in RStudio
 # View(site_results$coho_sites)
 
-# # Write each to CSV
-# for (name in names(site_results)) {
-#   filename = file.path("output", paste0(name, ".csv"))
-#   write.csv(site_results[[name]], file = filename, row.names = FALSE)
-# }
-
 dir.create("output", showWarnings = FALSE, recursive = TRUE)
 
 for (nm in names(site_results)) {
