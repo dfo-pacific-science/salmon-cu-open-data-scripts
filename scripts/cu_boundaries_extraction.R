@@ -183,7 +183,7 @@ queries = list(
       SPECIES='Chum'
       ORDER BY FULL_CU_IN ASC;",
 
-  CO_CU_SITES_Fr = "
+  CO_CU_BOUNDARY_Fr = "
   SELECT
       CU_NAME_FR AS NOM_UC,
       FULL_CU_IN AS INDICE_UC,
@@ -263,7 +263,7 @@ for (name in names(queries)) {
 }
 
 # Now you can inspect each result in RStudio
-# View(results$`Chinook Salmon CU Boundary`)
+# View(results$SEL_CU_BOUNDARY_Fr)
 
 # Write to a CSV
 for (name in names(results)) {
