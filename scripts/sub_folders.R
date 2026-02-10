@@ -24,7 +24,7 @@
 # ---- Settings ----
 root_dir <- "output"   # Folder containing all CSVs
 dry_run  <- FALSE       # Set TRUE to preview actions without moving files
-overwrite <- FALSE        # If FALSE, skip when target file already exists
+overwrite <- TRUE        # If FALSE, skip when target file already exists
 
 # Map: keyword (regex or literal) -> subfolder name
 # Order matters: first matching key is used
@@ -66,7 +66,7 @@ plan_df <- do.call(rbind, lapply(plan, as.data.frame))
 plan_df$exists <- ifelse(is.na(plan_df$dst), NA, file.exists(plan_df$dst))
 
 # Show what will happen
-print(plan_df[, c("src", "dst", "reason", "exists")], row.names = FALSE)
+#print(plan_df[, c("src", "dst", "reason", "exists")], row.names = FALSE)
 
 # Perform the move
 if (!dry_run) {
