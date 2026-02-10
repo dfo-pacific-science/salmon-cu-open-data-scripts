@@ -54,9 +54,40 @@ rm(list = ls(all.names = TRUE))
 # Create a DuckDB connection
 con = dbConnect(duckdb())
 
+# force three geo_feature columns to text to reduce warnings
+xlsx_path <- "data/geo_features.xlsx"       # <-- update path
+sheet     <- NULL                      # or a sheet name/index if needed
+
+# Read just the header to get column names
+hdr <- read_excel(xlsx_path, sheet = sheet, n_max = 0)
+n   <- ncol(hdr)
+
+# Start with 'guess' for all columns
+col_types <- rep("guess", n)
+names(col_types) <- names(hdr)
+
+# Columns to force as text (by name)
+force_text_names <- c("SOURCE_TYP", "CREATED_BY", "SOURCE", "PURPOSE",
+                      "ABBREV", "GCL_NME", "DFO_AREA_FR")
+
+
+# Validate names exist in the file (warn if any are missing)
+missing <- setdiff(force_text_names, names(hdr))
+if (length(missing)) {
+  warning(
+    "These columns were not found in the Excel header and will not be forced to text: ",
+    paste(missing, collapse = ", ")
+  )
+}
+
+
+# Force matching columns to 'text'
+col_types[names(col_types) %in% force_text_names] <- "text"
+
 # Read Excel files into data frames
+# geo_features with three columns explicitedly as text to reduce warnings
 conserv_units_system_sites_df = read_excel("data/conserv_unit_system_sites_mv.xlsx")
-geo_features_df = read_excel("data/geo_features.xlsx")
+geo_features_df = read_excel(xlsx_path, sheet = sheet, col_types = unname(col_types))
 cu_profile_df = read_excel("data/cu_profile_vw.xlsx")
 
 # Register data frames as DuckDB tables
