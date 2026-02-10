@@ -56,10 +56,12 @@ con = dbConnect(duckdb())
 # Read Excel files into data frames
 conserv_units_system_sites_df = read_excel("data/conserv_unit_system_sites_mv.xlsx")
 geo_features_df = read_excel("data/geo_features.xlsx")
+cu_profile_df = read_excel("data/cu_profile_vw.xlsx")
 
 # Register data frames as DuckDB tables
 duckdb_register(con, "CONSERV_UNIT_SYSTEM_SITES_MV", conserv_units_system_sites_df)
 duckdb_register(con, "GEO_FEATURES", geo_features_df)
+duckdb_register(con, "CU_PROFILE_VW", cu_profile_df)
 
 # Define SQL queries and output names
 queries = list(
