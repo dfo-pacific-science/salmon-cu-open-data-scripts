@@ -10,19 +10,20 @@
 # The SQL code has been adapted to run in R using "DuckDB". The original SQL
 # code is saved as a text file and found in the SQL folder.
 
-# The source data comes from two database views from NuSEDS:
+# The source data comes from three database views from NuSEDS:
 # - CONSERV_UNIT_SYSTEM_SITES_MV: contains CU site metadata
 # - GEO_FEATURES: contains geographic names
-# These have been exported as Excel files ('conserv_unit_system_sites_mv.xlsx'
-# and 'Geo_Features.xlsx').
+# - cu_profile_vw: contains CU CU type in French
+# These have been exported as Excel files ('conserv_unit_system_sites_mv.xlsx,'
+#  'Geo_Features.xlsx', cu_profile_vw.xlsx).
 
 # Each SQL query targets a specific species or life history type and retrieves
 # site-level details including coordinates, watershed codes, and CU identifiers.
 
 # Output:
-# - Each query result is saved as a named data frame (e.g., coho_sites)
-# - Each data frame is written to a separate CSV file (e.g., coho_sites.csv)
-# - Files are saved in the output folder with lowercase, underscore-separated names
+# - Each query result is saved as a named data frame (e.g., CK_CU_SITES_En)
+# - Each data frame is written to a separate CSV file (e.g., CK_CU_SITES_En.csv)
+# - Files are saved in the output folder with Open data format names
 
 # Important:
 # The original SQL code contains multiple SELECT statements.
@@ -31,8 +32,8 @@
 # for inspection and export.
 
 # Usage:
-# 1. Ensure the Excel files 'conserv_unit_system_sites_mv.xlsx' and
-#    'Geo_Features.xlsx' are in your working directory.
+# 1. Ensure the Excel files 'conserv_unit_system_sites_mv.xlsx',
+#    'Geo_Features.xlsx' and CU_PROFILE_VW.xlxs are in your working directory.
 # 2. Run the script to generate and inspect data frames.
 # 3. CSVs will be written to the output folder
 ################################################################################
@@ -150,7 +151,368 @@ queries = list(
     FROM CONSERV_UNIT_SYSTEM_SITES_MV CUSS, GEO_FEATURES GFE
     WHERE CUSS.GFE_ID = GFE.ID AND CUSS.SPECIES_QUALIFIED = 'SER'
     ORDER BY FULL_CU_IN ASC
-  "
+  ",
+
+  CK_CU_SITES_Fr = "
+  SELECT
+      CUSS.SYSTEM_SITE_FR AS SITE_DE_DÉNOMBREMENT,
+      GFE.GAZETTED_NME AS NOM_GAZETTÉ,
+      CUSS.GFE_ID AS ID_SITE_DE_DÉNOMBREMENT,
+      CUSS.Y_LAT AS LATITUDE_Y,
+      CUSS.X_LONGT AS LONGITUDE_X,
+      CASE
+              WHEN GFE_TYPE = 'Stream Segment' THEN 'segment de cours d’eau'
+              WHEN GFE_TYPE = 'Artificial Channel' THEN 'chenal artificiel'
+              WHEN GFE_TYPE = 'Slough' THEN 'marigot'
+              WHEN GFE_TYPE = 'Stream Aggregate' THEN 'agrégat de cours d’eau'
+              WHEN GFE_TYPE = 'Lake' THEN 'lac'
+              WHEN GFE_TYPE = 'Slough Segment' THEN 'segment de marigot'
+              WHEN GFE_TYPE = 'Stream' THEN 'cours d''eau'
+              WHEN GFE_TYPE = 'Lake Portion' THEN ' partie du lac'
+              ELSE GFE_TYPE
+          END AS TYPE_DE_CARACTÉRISTIQUE_GÉOLOGIQUE,
+      CUSS.FWA_WATERSHED_CDE AS CODE_DE_BASSIN_VERSANT_FWA,
+      CUSS.WATERSHED_CDE AS CODE_DU_BASSIN,
+      CUSS.CU_NAME AS 'NOM_DE_L’UC',
+      CUSS.FULL_CU_IN AS INDEX_COMPLET_DES_UNITÉS_DE_CONSERVATION,
+      CUSS.SPECIES_QUALIFIED AS SP_QUAL,
+      CUPV.CU_TYPE_FR AS TYPE_UC,
+      CUSS.POP_ID AS ID_DE_LA_POPULATION,
+      CUSS.FAZ_ACRO AS ACRO_ZAEU,
+      CUSS.MAZ_ACRO AS ACRO_ZAM,
+      CUSS.JAZ_ACRO AS ACRO_ZAC
+    FROM
+      CONSERV_UNIT_SYSTEM_SITES_MV CUSS,
+      GEO_FEATURES GFE,
+      CU_PROFILE_VW CUPV
+      WHERE
+      CUSS.GFE_ID=GFE.ID
+      AND
+      CUSS.FULL_CU_IN=CUPV.FULL_CU_IN
+      AND
+      CUSS.SPECIES_QUALIFIED='CK'
+      ORDER BY CUSS.FULL_CU_IN ASC;",
+
+  CK_SBC_CU_SITES_Fr = "
+  SELECT
+  CUSS.SYSTEM_SITE_FR AS SITE_DE_DÉNOMBREMENT,
+  GFE.GAZETTED_NME AS NOM_GAZETTÉ,
+  CUSS.GFE_ID AS ID_SITE_DE_DÉNOMBREMENT,
+  CUSS.Y_LAT AS LATITUDE_Y,
+  CUSS.X_LONGT AS LONGITUDE_X,
+  CASE
+  WHEN GFE_TYPE = 'Stream Segment' THEN 'segment de cours d’eau'
+  WHEN GFE_TYPE = 'Artificial Channel' THEN 'chenal artificiel'
+  WHEN GFE_TYPE = 'Slough' THEN 'marigot'
+  WHEN GFE_TYPE = 'Stream Aggregate' THEN 'agrégat de cours d’eau'
+  WHEN GFE_TYPE = 'Lake' THEN 'lac'
+  WHEN GFE_TYPE = 'Slough Segment' THEN 'segment de marigot'
+  WHEN GFE_TYPE = 'Stream' THEN 'cours d''eau'
+  WHEN GFE_TYPE = 'Lake Portion' THEN ' partie du lac'
+  ELSE GFE_TYPE
+  END AS TYPE_DE_CARACTÉRISTIQUE_GÉOLOGIQUE,
+  CUSS.FWA_WATERSHED_CDE AS CODE_DE_BASSIN_VERSANT_FWA,
+  CUSS.WATERSHED_CDE AS CODE_DU_BASSIN,
+  CUSS.CU_NAME AS 'NOM_DE_L’UC',
+  CUSS.FULL_CU_IN AS INDEX_COMPLET_DES_UNITÉS_DE_CONSERVATION,
+  CUSS.SPECIES_QUALIFIED AS SP_QUAL,
+  CUPV.CU_TYPE_FR AS TYPE_UC,
+  CUSS.POP_ID AS ID_DE_LA_POPULATION,
+  CUSS.FAZ_ACRO AS ACRO_ZAEU,
+  CUSS.MAZ_ACRO AS ACRO_ZAM,
+  CUSS.JAZ_ACRO AS ACRO_ZAC
+FROM
+  CONSERV_UNIT_SYSTEM_SITES_MV CUSS,
+  GEO_FEATURES GFE,
+  CU_PROFILE_VW CUPV
+WHERE
+  CUSS.GFE_ID=GFE.ID
+  AND
+  CUSS.FULL_CU_IN=CUPV.FULL_CU_IN
+  AND
+  CUSS.SPECIES_QUALIFIED='CK'
+  AND
+  CUSS.FULL_CU_IN IN ('CK-01',
+                      'CK-02',
+                      'CK-03',
+                      'CK-04',
+                      'CK-05',
+                      'CK-06',
+                      'CK-07',
+                      'CK-08',
+                      'CK-09',
+                      'CK-10',
+                      'CK-11',
+                      'CK-12',
+                      'CK-13',
+                      'CK-14',
+                      'CK-15',
+                      'CK-16',
+                      'CK-17',
+                      'CK-18',
+                      'CK-19',
+                      'CK-20',
+                      'CK-21',
+                      'CK-22',
+                      'CK-25',
+                      'CK-27',
+                      'CK-28',
+                      'CK-29',
+                      'CK-31',
+                      'CK-32',
+                      'CK-33',
+                      'CK-34',
+                      'CK-35',
+                      'CK-82',
+                      'CK-83',
+                      'CK-9005',
+                      'CK-9008')
+  ORDER BY CUSS.FULL_CU_IN ASC;",
+
+    CM_CU_SITES_Fr = "
+  SELECT
+      CUSS.SYSTEM_SITE_FR AS SITE_DE_DÉNOMBREMENT,
+      GFE.GAZETTED_NME AS NOM_GAZETTÉ,
+      CUSS.GFE_ID AS ID_SITE_DE_DÉNOMBREMENT,
+      CUSS.Y_LAT AS LATITUDE_Y,
+      CUSS.X_LONGT AS LONGITUDE_X,
+      CASE
+              WHEN GFE_TYPE = 'Stream Segment' THEN 'segment de cours d’eau'
+              WHEN GFE_TYPE = 'Artificial Channel' THEN 'chenal artificiel'
+              WHEN GFE_TYPE = 'Slough' THEN 'marigot'
+              WHEN GFE_TYPE = 'Stream Aggregate' THEN 'agrégat de cours d’eau'
+              WHEN GFE_TYPE = 'Lake' THEN 'lac'
+              WHEN GFE_TYPE = 'Slough Segment' THEN 'segment de marigot'
+              WHEN GFE_TYPE = 'Stream' THEN 'cours d''eau'
+              WHEN GFE_TYPE = 'Lake Portion' THEN ' partie du lac'
+              ELSE GFE_TYPE
+          END AS TYPE_DE_CARACTÉRISTIQUE_GÉOLOGIQUE,
+      CUSS.FWA_WATERSHED_CDE AS CODE_DE_BASSIN_VERSANT_FWA,
+      CUSS.WATERSHED_CDE AS CODE_DU_BASSIN,
+      CUSS.CU_NAME AS 'NOM_DE_L’UC',
+      CUSS.FULL_CU_IN AS INDEX_COMPLET_DES_UNITÉS_DE_CONSERVATION,
+      CUSS.SPECIES_QUALIFIED AS SP_QUAL,
+      CUPV.CU_TYPE_FR AS TYPE_UC,
+      CUSS.POP_ID AS ID_DE_LA_POPULATION,
+      CUSS.FAZ_ACRO AS ACRO_ZAEU,
+      CUSS.MAZ_ACRO AS ACRO_ZAM,
+      CUSS.JAZ_ACRO AS ACRO_ZAC
+    FROM
+      CONSERV_UNIT_SYSTEM_SITES_MV CUSS,
+      GEO_FEATURES GFE,
+      CU_PROFILE_VW CUPV
+    WHERE
+      CUSS.GFE_ID=GFE.ID
+      AND
+      CUSS.FULL_CU_IN=CUPV.FULL_CU_IN
+      AND
+      CUSS.SPECIES_QUALIFIED='CM'
+      ORDER BY CUSS.FULL_CU_IN ASC;",
+
+  CO_CU_SITES_Fr = "
+  SELECT
+      CUSS.SYSTEM_SITE_FR AS SITE_DE_DÉNOMBREMENT,
+      GFE.GAZETTED_NME AS NOM_GAZETTÉ,
+      CUSS.GFE_ID AS ID_SITE_DE_DÉNOMBREMENT,
+      CUSS.Y_LAT AS LATITUDE_Y,
+      CUSS.X_LONGT AS LONGITUDE_X,
+      CASE
+              WHEN GFE_TYPE = 'Stream Segment' THEN 'segment de cours d’eau'
+              WHEN GFE_TYPE = 'Artificial Channel' THEN 'chenal artificiel'
+              WHEN GFE_TYPE = 'Slough' THEN 'marigot'
+              WHEN GFE_TYPE = 'Stream Aggregate' THEN 'agrégat de cours d’eau'
+              WHEN GFE_TYPE = 'Lake' THEN 'lac'
+              WHEN GFE_TYPE = 'Slough Segment' THEN 'segment de marigot'
+              WHEN GFE_TYPE = 'Stream' THEN 'cours d''eau'
+              WHEN GFE_TYPE = 'Lake Portion' THEN ' partie du lac'
+              ELSE GFE_TYPE
+          END AS TYPE_DE_CARACTÉRISTIQUE_GÉOLOGIQUE,
+      CUSS.FWA_WATERSHED_CDE AS CODE_DE_BASSIN_VERSANT_FWA,
+      CUSS.WATERSHED_CDE AS CODE_DU_BASSIN,
+      CUSS.CU_NAME AS 'NOM_DE_L’UC',
+      CUSS.FULL_CU_IN AS INDEX_COMPLET_DES_UNITÉS_DE_CONSERVATION,
+      CUSS.SPECIES_QUALIFIED AS SP_QUAL,
+      CUPV.CU_TYPE_FR AS TYPE_UC,
+      CUSS.POP_ID AS ID_DE_LA_POPULATION,
+      CUSS.FAZ_ACRO AS ACRO_ZAEU,
+      CUSS.MAZ_ACRO AS ACRO_ZAM,
+      CUSS.JAZ_ACRO AS ACRO_ZAC
+    FROM
+      CONSERV_UNIT_SYSTEM_SITES_MV CUSS,
+      GEO_FEATURES GFE,
+      CU_PROFILE_VW CUPV
+    WHERE
+      CUSS.GFE_ID=GFE.ID
+      AND
+      CUSS.FULL_CU_IN=CUPV.FULL_CU_IN
+      AND
+      CUSS.SPECIES_QUALIFIED='CO'
+      ORDER BY CUSS.FULL_CU_IN ASC;",
+
+  # PKE_CU_SITES_Fr is not working
+  PKE_CU_SITES_Fr = "
+  SELECT
+      CUSS.SYSTEM_SITE_FR AS SITE_DE_DÉNOMBREMENT,
+      GFE.GAZETTED_NME AS NOM_GAZETTÉ,
+      CUSS.GFE_ID AS ID_SITE_DE_DÉNOMBREMENT,
+      CUSS.Y_LAT AS LATITUDE_Y,
+      CUSS.X_LONGT AS LONGITUDE_X,
+      CASE
+              WHEN GFE_TYPE = 'Stream Segment' THEN 'segment de cours d’eau'
+              WHEN GFE_TYPE = 'Artificial Channel' THEN 'chenal artificiel'
+              WHEN GFE_TYPE = 'Slough' THEN 'marigot'
+              WHEN GFE_TYPE = 'Stream Aggregate' THEN 'agrégat de cours d’eau'
+              WHEN GFE_TYPE = 'Lake' THEN 'lac'
+              WHEN GFE_TYPE = 'Slough Segment' THEN 'segment de marigot'
+              WHEN GFE_TYPE = 'Stream' THEN 'cours d''eau'
+              WHEN GFE_TYPE = 'Lake Portion' THEN ' partie du lac'
+              ELSE GFE_TYPE
+          END AS TYPE_DE_CARACTÉRISTIQUE_GÉOLOGIQUE,
+      CUSS.FWA_WATERSHED_CDE AS CODE_DE_BASSIN_VERSANT_FWA,
+      CUSS.WATERSHED_CDE AS CODE_DU_BASSIN,
+      CUSS.CU_NAME AS 'NOM_DE_L’UC',
+      CUSS.FULL_CU_IN AS INDEX_COMPLET_DES_UNITÉS_DE_CONSERVATION,
+      CUSS.SPECIES_QUALIFIED AS SP_QUAL,
+      CUPV.CU_TYPE_FR AS TYPE_UC,
+      CUSS.POP_ID AS ID_DE_LA_POPULATION,
+      CUSS.FAZ_ACRO AS ACRO_ZAEU,
+      CUSS.MAZ_ACRO AS ACRO_ZAM,
+      CUSS.JAZ_ACRO AS ACRO_ZAC
+    FROM
+      CONSERV_UNIT_SYSTEM_SITES_MV CUSS,
+      GEO_FEATURES GFE,
+      CU_PROFILE_VW CUPV
+    WHERE
+      CUSS.GFE_ID=GFE.ID
+      AND
+      CUSS.FULL_CU_IN=CUPV.FULL_CU_IN
+      AND
+      CUSS.SPECIES_QUALIFIED='PKE'
+      ORDER BY CUSS.FULL_CU_IN ASC;",
+
+  # PKO_CU_SITES_Fr not working
+  PKO_CU_SITES_Fr = "
+  SELECT
+    CUSS.SYSTEM_SITE_FR AS SITE_DE_DÉNOMBREMENT,
+    GFE.GAZETTED_NME AS NOM_GAZETTÉ,
+    CUSS.GFE_ID AS ID_SITE_DE_DÉNOMBREMENT,
+    CUSS.Y_LAT AS LATITUDE_Y,
+    CUSS.X_LONGT AS LONGITUDE_X,
+    CASE
+            WHEN GFE_TYPE = 'Stream Segment' THEN 'segment de cours d’eau'
+            WHEN GFE_TYPE = 'Artificial Channel' THEN 'chenal artificiel'
+            WHEN GFE_TYPE = 'Slough' THEN 'marigot'
+            WHEN GFE_TYPE = 'Stream Aggregate' THEN 'agrégat de cours d’eau'
+            WHEN GFE_TYPE = 'Lake' THEN 'lac'
+            WHEN GFE_TYPE = 'Slough Segment' THEN 'segment de marigot'
+            WHEN GFE_TYPE = 'Stream' THEN 'cours d''eau'
+            WHEN GFE_TYPE = 'Lake Portion' THEN ' partie du lac'
+            ELSE GFE_TYPE
+        END AS TYPE_DE_CARACTÉRISTIQUE_GÉOLOGIQUE,
+    CUSS.FWA_WATERSHED_CDE AS CODE_DE_BASSIN_VERSANT_FWA,
+    CUSS.WATERSHED_CDE AS CODE_DU_BASSIN,
+    CUSS.CU_NAME AS 'NOM_DE_L’UC',
+    CUSS.FULL_CU_IN AS INDEX_COMPLET_DES_UNITÉS_DE_CONSERVATION,
+    CUSS.SPECIES_QUALIFIED AS SP_QUAL,
+    CUPV.CU_TYPE_FR AS TYPE_UC,
+    CUSS.POP_ID AS ID_DE_LA_POPULATION,
+    CUSS.FAZ_ACRO AS ACRO_ZAEU,
+    CUSS.MAZ_ACRO AS ACRO_ZAM,
+    CUSS.JAZ_ACRO AS ACRO_ZAC
+  FROM
+    CONSERV_UNIT_SYSTEM_SITES_MV CUSS,
+    GEO_FEATURES GFE,
+    CU_PROFILE_VW CUPV
+  WHERE
+    CUSS.GFE_ID=GFE.ID
+    AND
+    CUSS.FULL_CU_IN=CUPV.FULL_CU_IN
+    AND
+    CUSS.SPECIES_QUALIFIED='PKO'
+    ORDER BY CUSS.FULL_CU_IN ASC;",
+
+  # SEL_CU_SITES_Fr not working
+  SEL_CU_SITES_Fr = "
+  SELECT
+      CUSS.SYSTEM_SITE_FR AS SITE_DE_DÉNOMBREMENT,
+      GFE.GAZETTED_NME AS NOM_GAZETTÉ,
+      CUSS.GFE_ID AS ID_SITE_DE_DÉNOMBREMENT,
+      CUSS.Y_LAT AS LATITUDE_Y,
+      CUSS.X_LONGT AS LONGITUDE_X,
+      CASE
+              WHEN GFE_TYPE = 'Stream Segment' THEN 'segment de cours d’eau'
+              WHEN GFE_TYPE = 'Artificial Channel' THEN 'chenal artificiel'
+              WHEN GFE_TYPE = 'Slough' THEN 'marigot'
+              WHEN GFE_TYPE = 'Stream Aggregate' THEN 'agrégat de cours d’eau'
+              WHEN GFE_TYPE = 'Lake' THEN 'lac'
+              WHEN GFE_TYPE = 'Slough Segment' THEN 'segment de marigot'
+              WHEN GFE_TYPE = 'Stream' THEN 'cours d''eau'
+              WHEN GFE_TYPE = 'Lake Portion' THEN ' partie du lac'
+              ELSE GFE_TYPE
+          END AS TYPE_DE_CARACTÉRISTIQUE_GÉOLOGIQUE,
+      CUSS.FWA_WATERSHED_CDE AS CODE_DE_BASSIN_VERSANT_FWA,
+      CUSS.WATERSHED_CDE AS CODE_DU_BASSIN,
+      CUSS.CU_NAME AS 'NOM_DE_L’UC',
+      CUSS.FULL_CU_IN AS INDEX_COMPLET_DES_UNITÉS_DE_CONSERVATION,
+      CUSS.SPECIES_QUALIFIED AS SP_QUAL,
+      CUPV.CU_TYPE_FR AS TYPE_UC,
+      CUSS.POP_ID AS ID_DE_LA_POPULATION,
+      CUSS.FAZ_ACRO AS ACRO_ZAEU,
+      CUSS.MAZ_ACRO AS ACRO_ZAM,
+      CUSS.JAZ_ACRO AS ACRO_ZAC
+      FROM
+      CONSERV_UNIT_SYSTEM_SITES_MV CUSS,
+      GEO_FEATURES GFE,
+      CU_PROFILE_VW CUPV
+      WHERE
+      CUSS.GFE_ID=GFE.ID
+      AND
+      CUSS.FULL_CU_IN=CUPV.FULL_CU_IN
+      AND
+      CUSS.SPECIES_QUALIFIED='SEL'
+      ORDER BY CUSS.FULL_CU_IN ASC;",
+
+  # SER_CU_SITES_Fr not working
+  SER_CU_SITES_Fr = "
+  SELECT
+      CUSS.SYSTEM_SITE_FR AS SITE_DE_DÉNOMBREMENT,
+      GFE.GAZETTED_NME AS NOM_GAZETTÉ,
+      CUSS.GFE_ID AS ID_SITE_DE_DÉNOMBREMENT,
+      CUSS.Y_LAT AS LATITUDE_Y,
+      CUSS.X_LONGT AS LONGITUDE_X,
+      CASE
+              WHEN GFE_TYPE = 'Stream Segment' THEN 'segment de cours d’eau'
+              WHEN GFE_TYPE = 'Artificial Channel' THEN 'chenal artificiel'
+              WHEN GFE_TYPE = 'Slough' THEN 'marigot'
+              WHEN GFE_TYPE = 'Stream Aggregate' THEN 'agrégat de cours d’eau'
+              WHEN GFE_TYPE = 'Lake' THEN 'lac'
+              WHEN GFE_TYPE = 'Slough Segment' THEN 'segment de marigot'
+              WHEN GFE_TYPE = 'Stream' THEN 'cours d''eau'
+              WHEN GFE_TYPE = 'Lake Portion' THEN ' partie du lac'
+              ELSE GFE_TYPE
+          END AS TYPE_DE_CARACTÉRISTIQUE_GÉOLOGIQUE,
+      CUSS.FWA_WATERSHED_CDE AS CODE_DE_BASSIN_VERSANT_FWA,
+      CUSS.WATERSHED_CDE AS CODE_DU_BASSIN,
+      CUSS.CU_NAME AS 'NOM_DE_L’UC',
+      CUSS.FULL_CU_IN AS INDEX_COMPLET_DES_UNITÉS_DE_CONSERVATION,
+      CUSS.SPECIES_QUALIFIED AS SP_QUAL,
+      CUPV.CU_TYPE_FR AS TYPE_UC,
+      CUSS.POP_ID AS ID_DE_LA_POPULATION,
+      CUSS.FAZ_ACRO AS ACRO_ZAEU,
+      CUSS.MAZ_ACRO AS ACRO_ZAM,
+      CUSS.JAZ_ACRO AS ACRO_ZAC
+    FROM
+      CONSERV_UNIT_SYSTEM_SITES_MV CUSS,
+      GEO_FEATURES GFE,
+      CU_PROFILE_VW CUPV
+    WHERE
+      CUSS.GFE_ID=GFE.ID
+      AND
+      CUSS.FULL_CU_IN=CUPV.FULL_CU_IN
+      AND
+      CUSS.SPECIES_QUALIFIED='SER'
+      ORDER BY CUSS.FULL_CU_IN ASC;
+"
 )
 
 # Run each query and store results in named data frames
