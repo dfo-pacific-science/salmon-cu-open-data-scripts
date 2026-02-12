@@ -562,7 +562,8 @@ dir.create("output", showWarnings = FALSE, recursive = TRUE)
 
 for (nm in names(site_results)) {
   filename <- file.path("output", paste0(nm, ".csv"))
-  write_excel_csv(site_results[[nm]], filename)  # UTF-8 with BOM
+  # UTF-8 with BOM & blanks for missing values
+  write_excel_csv(site_results[[nm]], filename, na = "")
 }
 
 # Disconnect from DuckDB

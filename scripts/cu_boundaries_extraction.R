@@ -267,17 +267,12 @@ for (name in names(queries)) {
 # Now you can inspect each result in RStudio
 # View(boundary_results$SEL_CU_BOUNDARY_Fr)
 
-# # Write to a CSV
-# for (name in names(boundary_results)) {
-#   filename = file.path("output", paste0(name, ".csv"))
-#   write.csv(boundary_results[[name]], file = filename, row.names = FALSE)
-# }
-
 dir.create("output", showWarnings = FALSE, recursive = TRUE)
 
 for (nm in names(boundary_results)) {
   filename <- file.path("output", paste0(nm, ".csv"))
-  write_excel_csv(boundary_results[[nm]], filename)  # UTF-8 with BOM
+  # UTF-8 with BOM & blanks for missing values
+  write_excel_csv(boundary_results[[nm]], filename, na = "")
 }
 
 # Disconnect from DuckDB
