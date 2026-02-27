@@ -13,6 +13,7 @@ Outputs are intended to be uploaded as part of the [Pacific salmon conservation 
 -   `cu_status_extraction.R`: Extracts status assessments for Pacific salmon CUs.
 -   `cu_sites_extraction.R`: Extracts site-level information including coordinates, watershed codes, and CU identifiers.
 -   `cu_boundary_extraction.R`: Extracts CU-level metadata for mapping and boundary file generation.
+-   `sub_folders.R`: Combines csv files into submission folders
 
 ## Folder Structure
 
@@ -32,6 +33,7 @@ sql/       - Original SQL queries used to generate the data. Provided for refere
     -   `cu_profile_vw.xlsx`
     -   `conserv_unit_system_sites_mv.xlsx`
     -   `Geo_Features.xlsx`
+    -   `sub_folders.R`
 
 3.  Open each script in RStudio and run it.
 
@@ -40,6 +42,7 @@ sql/       - Original SQL queries used to generate the data. Provided for refere
     -   Load the Excel files into DuckDB
     -   Run SQL queries individually
     -   Save the results as CSV files in the `output/` folder
+    -   The final script will combine the csv files into submission files
 
 ## Notes
 
