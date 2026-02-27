@@ -33,9 +33,8 @@ sql/       - Original SQL queries used to generate the data. Provided for refere
     -   `cu_profile_vw.xlsx`
     -   `conserv_unit_system_sites_mv.xlsx`
     -   `Geo_Features.xlsx`
-    -   `sub_folders.R`
 
-3.  Open each script in RStudio and run it.
+3.  Open each script in RStudio. Run it with teh sub folders script last.
 
 4.  Each script will:
 
