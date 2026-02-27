@@ -55,8 +55,7 @@ plan <- lapply(csvs, function(f) {
     return(list(src = f, dst = NA_character_, reason = "no_rule_match"))
   }
 
-  date_suffix <- format(Sys.Date(), "%Y%m%d")
-  subdir <- file.path(root_dir, paste0(rules[[match]], "_", date_suffix))
+  subdir <- file.path(root_dir, paste0(rules[[match]]))
   dst <- file.path(subdir, fname)
   list(src = f, dst = dst, reason = "ok")
 })
